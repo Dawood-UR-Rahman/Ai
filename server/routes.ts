@@ -174,8 +174,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       await transporter.sendMail(mailOptions);
       
-      // Update invoice status to sent
-      await storage.updateInvoice(req.params.id, { status: "sent" });
+      // Update invoice status to sent and ensure hosted URL is set if hosting enabled
+      const updateData: any = { status: "sent" };
+      if (invoice.isHosted && !invoice.hostedUrl) {
+        updateData.hostedUrl = `https://workspace-1755760863815.replit.app/invoice/${invoice.id}`;
+      }
+      await storage.updateInvoice(req.params.id, updateData);
       
       res.json({ message: "Email sent successfully" });
     } catch (error) {

@@ -144,7 +144,10 @@ export default function CreateInvoice() {
       const invoiceUrl = `https://workspace-1755760863815.replit.app/invoice/${existingInvoice.id}`;
       generateQRCode(invoiceUrl)
         .then(setQRCodeDataURL)
-        .catch(console.error);
+        .catch((error) => {
+          console.error('QR Code generation failed:', error);
+          setQRCodeDataURL(null);
+        });
     } else {
       setQRCodeDataURL(null);
     }
@@ -259,7 +262,7 @@ export default function CreateInvoice() {
       isHosted: formData.isHosted || false,
       isPasswordProtected: formData.isPasswordProtected || false,
       password: formData.password || null,
-      hostedUrl: null,
+      hostedUrl: formData.isHosted ? `https://workspace-1755760863815.replit.app/invoice/preview` : null,
       createdAt: new Date(),
       updatedAt: new Date(),
       lineItems: lineItems.map((item, index) => ({

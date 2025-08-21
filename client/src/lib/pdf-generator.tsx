@@ -115,12 +115,16 @@ interface PDFInvoiceProps {
 }
 
 export function PDFInvoice({ invoice, qrCodeDataURL }: PDFInvoiceProps) {
+  // Generate QR code URL if invoice is hosted and no QR code provided
+  const invoiceQRCode = qrCodeDataURL || (invoice.isHosted && invoice.hostedUrl ? 
+    `https://api.qrserver.com/v1/create-qr-code/?size=200x200&format=png&data=${encodeURIComponent(invoice.hostedUrl)}` : null);
+  
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         {/* QR Code in top-right corner */}
-        {qrCodeDataURL && (
-          <Image src={qrCodeDataURL} style={styles.qrCode} />
+        {invoiceQRCode && (
+          <Image src={invoiceQRCode} style={styles.qrCode} />
         )}
 
         {/* Header */}

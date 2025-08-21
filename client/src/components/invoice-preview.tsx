@@ -53,10 +53,20 @@ export default function InvoicePreview({
           {/* QR Code positioned top-right */}
           <div className="bg-gray-100 p-2 rounded-lg">
             <div className="w-16 h-16 bg-white border-2 border-dashed border-gray-300 rounded flex items-center justify-center">
-              {qrCodeDataURL ? (
-                <img src={qrCodeDataURL} alt="QR Code" className="w-full h-full object-contain" />
+              {formData.isHosted ? (
+                qrCodeDataURL ? (
+                  <img src={qrCodeDataURL} alt="QR Code" className="w-full h-full object-contain" />
+                ) : (
+                  <div className="text-xs text-center text-gray-500">
+                    <i className="fas fa-qrcode text-lg mb-1"></i>
+                    <div>QR Code</div>
+                  </div>
+                )
               ) : (
-                <i className="fas fa-qrcode text-xl text-gray-400"></i>
+                <div className="text-xs text-center text-gray-400">
+                  <i className="fas fa-qrcode text-lg mb-1"></i>
+                  <div>Enable hosting</div>
+                </div>
               )}
             </div>
           </div>
