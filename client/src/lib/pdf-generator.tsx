@@ -101,11 +101,9 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   qrCode: {
-    position: 'absolute',
-    top: 40,
-    right: 40,
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
+    marginTop: 10,
   },
 });
 
@@ -122,11 +120,6 @@ export function PDFInvoice({ invoice, qrCodeDataURL }: PDFInvoiceProps) {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* QR Code in top-right corner */}
-        {invoiceQRCode && (
-          <Image src={invoiceQRCode} style={styles.qrCode} />
-        )}
-
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.companyInfo}>
@@ -147,6 +140,10 @@ export function PDFInvoice({ invoice, qrCodeDataURL }: PDFInvoiceProps) {
             <Text style={styles.text}>Date: {new Date(invoice.invoiceDate).toLocaleDateString()}</Text>
             {invoice.dueDate && (
               <Text style={styles.text}>Due: {new Date(invoice.dueDate).toLocaleDateString()}</Text>
+            )}
+            {/* QR Code positioned below invoice info */}
+            {invoiceQRCode && (
+              <Image src={invoiceQRCode} style={styles.qrCode} />
             )}
           </View>
         </View>
