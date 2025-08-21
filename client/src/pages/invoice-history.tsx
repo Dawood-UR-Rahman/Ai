@@ -104,24 +104,24 @@ export default function InvoiceHistory() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 lg:space-y-8">
       {/* Header */}
       <Card>
-        <CardContent className="p-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <h2 className="text-2xl font-semibold text-gray-900">Invoice History</h2>
-              <p className="text-gray-600 mt-1">Manage and view all your created invoices</p>
+        <CardContent className="p-4 lg:p-6">
+          <div className="flex flex-col gap-4">
+            <div className="text-center lg:text-left">
+              <h2 className="text-xl lg:text-2xl font-semibold text-gray-900">Invoice History</h2>
+              <p className="text-gray-600 mt-1 text-sm lg:text-base">Manage and view all your created invoices</p>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex flex-col gap-3">
               <Input
                 type="search"
                 placeholder="Search invoices..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-64"
+                className="w-full text-base"
               />
-              <Button onClick={handleNewInvoice} className="bg-primary hover:bg-primary-dark">
+              <Button onClick={handleNewInvoice} className="w-full lg:w-auto bg-primary hover:bg-primary-dark py-3 text-base">
                 <i className="fas fa-plus mr-2"></i>New Invoice
               </Button>
             </div>

@@ -49,24 +49,24 @@ export default function InvoicePreview({
   return (
     <Card>
       <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
           <h3 className="text-lg font-semibold text-gray-900">Invoice Preview</h3>
           {/* QR Code positioned top-right */}
-          <div className="bg-gray-100 p-2 rounded-lg">
-            <div className="w-16 h-16 bg-white border-2 border-dashed border-gray-300 rounded flex items-center justify-center">
+          <div className="bg-gray-100 p-2 rounded-lg self-start sm:self-auto">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white border-2 border-dashed border-gray-300 rounded flex items-center justify-center">
               {formData.isHosted ? (
                 qrCodeDataURL ? (
                   <img src={qrCodeDataURL} alt="QR Code" className="w-full h-full object-contain" />
                 ) : (
                   <div className="text-xs text-center text-gray-500">
-                    <i className="fas fa-qrcode text-lg mb-1"></i>
-                    <div>QR Code</div>
+                    <i className="fas fa-qrcode text-sm sm:text-lg mb-1"></i>
+                    <div className="text-xs">QR Code</div>
                   </div>
                 )
               ) : (
                 <div className="text-xs text-center text-gray-400">
-                  <i className="fas fa-qrcode text-lg mb-1"></i>
-                  <div>Enable hosting</div>
+                  <i className="fas fa-qrcode text-sm sm:text-lg mb-1"></i>
+                  <div className="text-xs">Enable hosting</div>
                 </div>
               )}
             </div>

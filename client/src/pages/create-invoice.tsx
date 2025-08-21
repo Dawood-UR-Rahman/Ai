@@ -340,9 +340,9 @@ export default function CreateInvoice() {
       </Card>
 
       {/* Main Content */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         {/* Left Column - Form */}
-        <div className="xl:col-span-2">
+        <div className="lg:col-span-2">
           <InvoiceForm
             formData={formData}
             lineItems={lineItems}
@@ -353,22 +353,47 @@ export default function CreateInvoice() {
 
         {/* Right Column - Preview & Actions */}
         <div className="space-y-6">
-          <InvoicePreview
-            formData={formData}
-            lineItems={lineItems}
-            onFormChange={handleFormChange}
-          />
+          {/* Mobile: Show preview in collapsed state */}
+          <div className="lg:hidden">
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-base font-semibold text-gray-900">Quick Preview</h3>
+                  {formData.isHosted && qrCodeDataURL && (
+                    <div className="w-10 h-10 border rounded flex items-center justify-center bg-gray-50">
+                      <img src={qrCodeDataURL} alt="QR Code" className="w-8 h-8 object-contain" />
+                    </div>
+                  )}
+                </div>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <div><strong>Invoice:</strong> {formData.invoiceNumber || "#INV-000"}</div>
+                  <div><strong>Company:</strong> {formData.companyName || "Company Name"}</div>
+                  <div><strong>Client:</strong> {formData.clientName || "Client Name"}</div>
+                  <div><strong>Total:</strong> ${lineItems.reduce((sum, item) => sum + (parseFloat(item.rate || "0") * (item.quantity || 0)), 0).toFixed(2)}</div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Desktop: Full preview */}
+          <div className="hidden lg:block">
+            <InvoicePreview
+              formData={formData}
+              lineItems={lineItems}
+              onFormChange={handleFormChange}
+            />
+          </div>
 
           {/* Action Buttons */}
           <Card>
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Actions</h3>
+            <CardContent className="p-4 lg:p-6">
+              <h3 className="text-base lg:text-lg font-semibold text-gray-900 mb-4">Actions</h3>
               <div className="space-y-3">
                 {currentInvoice && (
                   <PDFDownloadButton
                     invoice={currentInvoice}
                     qrCodeDataURL={qrCodeDataURL || undefined}
-                    className="w-full bg-primary hover:bg-primary-dark text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
+                    className="w-full bg-primary hover:bg-primary-dark text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center text-sm lg:text-base"
                   >
                     <i className="fas fa-download mr-2"></i>Download PDF
                   </PDFDownloadButton>
@@ -376,7 +401,7 @@ export default function CreateInvoice() {
                 {isEditing && (
                   <Button
                     onClick={() => setIsEmailModalOpen(true)}
-                    className="w-full bg-green-600 hover:bg-green-700"
+                    className="w-full bg-green-600 hover:bg-green-700 py-3 text-sm lg:text-base"
                   >
                     <i className="fas fa-envelope mr-2"></i>Send Email
                   </Button>
