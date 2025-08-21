@@ -50,6 +50,8 @@ export class MemStorage implements IStorage {
       invoiceDate: "2023-12-15",
       dueDate: "2023-12-30",
       notes: "Thank you for your business!",
+      textInformation: "Please allow 5-7 business days for processing.\nPayment terms: Net 30 days.",
+      shippingCode: "UPS-123456789",
       subtotal: "350.00",
       tax: "0.00",
       total: "350.00",
