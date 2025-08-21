@@ -19,8 +19,9 @@ export default function InvoicePreview({
 }: InvoicePreviewProps) {
   const qrCodeUrl = useMemo(() => {
     if (formData.isHosted) {
-      const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
-      return `${baseUrl}/invoice/demo-preview`;
+      const baseUrl = 'https://workspace-1755760863815.replit.app';
+      // For preview, show a sample URL since we don't have the actual invoice ID yet
+      return `${baseUrl}/invoice/preview`;
     }
     return null;
   }, [formData.isHosted]);

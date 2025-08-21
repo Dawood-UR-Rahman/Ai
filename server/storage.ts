@@ -143,10 +143,11 @@ export class MemStorage implements IStorage {
     for (const item of request.lineItems) {
       const lineItemId = randomUUID();
       const lineItem: LineItem = {
-        ...item,
         id: lineItemId,
         invoiceId: id,
+        description: item.description,
         quantity: item.quantity || 1,
+        rate: item.rate,
         amount: (parseFloat(item.rate) * (item.quantity || 1)).toFixed(2),
       };
       this.lineItems.set(lineItemId, lineItem);
@@ -197,9 +198,11 @@ export class MemStorage implements IStorage {
   async addLineItem(lineItem: InsertLineItem): Promise<LineItem> {
     const id = randomUUID();
     const newLineItem: LineItem = {
-      ...lineItem,
       id,
+      invoiceId: lineItem.invoiceId,
+      description: lineItem.description,
       quantity: lineItem.quantity || 1,
+      rate: lineItem.rate,
       amount: (parseFloat(lineItem.rate) * (lineItem.quantity || 1)).toFixed(2),
     };
     
