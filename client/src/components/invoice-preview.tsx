@@ -19,8 +19,9 @@ export default function InvoicePreview({
 }: InvoicePreviewProps) {
   const qrCodeUrl = useMemo(() => {
     if (formData.isHosted) {
-      const baseUrl = 'https://workspace-1755760863815.replit.app';
       // For preview, show a sample URL since we don't have the actual invoice ID yet
+      // Use current window location to get the correct domain
+      const baseUrl = window.location.origin;
       return `${baseUrl}/view/preview`;
     }
     return null;

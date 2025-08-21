@@ -64,7 +64,9 @@ export const insertLineItemSchema = createInsertSchema(lineItems).omit({
   invoiceId: true,
 });
 
-export const updateInvoiceSchema = insertInvoiceSchema.partial();
+export const updateInvoiceSchema = insertInvoiceSchema.partial().extend({
+  hostedUrl: z.string().optional(),
+});
 
 // Email schema for sending invoices
 export const sendEmailSchema = z.object({

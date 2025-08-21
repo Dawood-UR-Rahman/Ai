@@ -141,6 +141,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get hosted URL for an invoice (for QR code generation)
+  app.get("/api/invoices/:id/hosted-url", async (req, res) => {
+    try {
+      const invoice = await storage.getInvoice(req.params.id);
+      if (!invoice) {
+        return res.status(404).json({ message: "Invoice not found" });
+      }
+
+      // Get the correct domain from environment variables
+      const replitDomain = process.env.REPLIT_DEV_DOMAIN || process.env.REPLIT_DOMAINS || 'localhost:5000';
+      const baseUrl = replitDomain.includes('localhost') ? `http://${replitDomain}` : `https://${replitDomain}`;
+      const hostedUrl = `${baseUrl}/view/${invoice.id}`;
+
+      // Update the invoice with the correct hosted URL if it's different
+      if (invoice.hostedUrl !== hostedUrl) {
+        await storage.updateInvoice(req.params.id, { hostedUrl });
+      }
+
+      res.json({ hostedUrl });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get hosted URL" });
+    }
+  });
+
   // Send invoice via email
   app.post("/api/invoices/:id/send-email", async (req, res) => {
     try {
@@ -151,7 +175,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Invoice not found" });
       }
 
-      const invoiceViewUrl = invoice.hostedUrl || `https://workspace-1755760863815.replit.app/view/${invoice.id}`;
+      // Get the correct domain from environment variables
+      const replitDomain = process.env.REPLIT_DEV_DOMAIN || process.env.REPLIT_DOMAINS || 'localhost:5000';
+      const baseUrl = replitDomain.includes('localhost') ? `http://${replitDomain}` : `https://${replitDomain}`;
+      const invoiceViewUrl = invoice.hostedUrl || `${baseUrl}/view/${invoice.id}`;
       
       const mailOptions = {
         from: 'accounts@jetourmultan.com',
@@ -199,7 +226,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Update invoice status to sent and ensure hosted URL is set if hosting enabled
       const updateData: any = { status: "sent" };
       if (invoice.isHosted && !invoice.hostedUrl) {
-        updateData.hostedUrl = `https://workspace-1755760863815.replit.app/view/${invoice.id}`;
+        // Get the correct domain from environment variables
+        const replitDomain = process.env.REPLIT_DEV_DOMAIN || process.env.REPLIT_DOMAINS || 'localhost:5000';
+        const baseUrl = replitDomain.includes('localhost') ? `http://${replitDomain}` : `https://${replitDomain}`;
+        updateData.hostedUrl = `${baseUrl}/view/${invoice.id}`;
       }
       await storage.updateInvoice(req.params.id, updateData);
       
