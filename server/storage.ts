@@ -140,7 +140,7 @@ export class MemStorage implements IStorage {
       isHosted: request.invoice.isHosted || false,
       isPasswordProtected: request.invoice.isPasswordProtected || false,
       password: request.invoice.password || null,
-      hostedUrl: request.invoice.isHosted ? `https://workspace-1755760863815.replit.app/view/${id}` : null,
+      hostedUrl: null, // Will be set by route handler if hosted
       createdAt: now,
       updatedAt: now,
     };

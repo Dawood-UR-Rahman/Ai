@@ -262,7 +262,7 @@ export default function CreateInvoice() {
       isHosted: formData.isHosted || false,
       isPasswordProtected: formData.isPasswordProtected || false,
       password: formData.password || null,
-      hostedUrl: formData.isHosted ? `https://workspace-1755760863815.replit.app/invoice/preview` : null,
+      hostedUrl: null, // Will be set by the server after creation
       createdAt: new Date(),
       updatedAt: new Date(),
       lineItems: lineItems.map((item, index) => ({
