@@ -133,35 +133,43 @@ export default function InvoicePreview({
         </div>
 
         {/* Hosting & Security Options */}
-        <div className="mt-4 space-y-3">
-          <div className="flex items-center space-x-3">
+        <div className="mt-4 space-y-4 p-3 bg-gray-50 rounded-lg border">
+          <div className="flex items-start space-x-3">
             <Checkbox
               id="hostInvoice"
               checked={formData.isHosted}
               onCheckedChange={(checked) => onFormChange("isHosted", !!checked)}
+              className="mt-0.5 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
             />
-            <Label htmlFor="hostInvoice" className="text-sm text-gray-700">
-              Host online with unique URL
-            </Label>
+            <div className="flex-1">
+              <Label htmlFor="hostInvoice" className="text-sm font-medium text-gray-800 cursor-pointer leading-relaxed">
+                Host online with unique URL
+              </Label>
+              <p className="text-xs text-gray-500 mt-1">Allow clients to view and pay online</p>
+            </div>
           </div>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-start space-x-3">
             <Checkbox
               id="passwordProtect"
               checked={formData.isPasswordProtected}
               onCheckedChange={(checked) => onFormChange("isPasswordProtected", !!checked)}
+              className="mt-0.5 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
             />
-            <Label htmlFor="passwordProtect" className="text-sm text-gray-700">
-              Password protect invoice
-            </Label>
+            <div className="flex-1">
+              <Label htmlFor="passwordProtect" className="text-sm font-medium text-gray-800 cursor-pointer leading-relaxed">
+                Password protect invoice
+              </Label>
+              <p className="text-xs text-gray-500 mt-1">Require password to view invoice</p>
+            </div>
           </div>
           {formData.isPasswordProtected && (
-            <div className="ml-6">
+            <div className="ml-7 pt-2">
               <Input
                 type="password"
                 placeholder="Enter password"
                 value={formData.password}
                 onChange={(e) => onFormChange("password", e.target.value)}
-                className="text-sm"
+                className="text-sm w-full"
               />
             </div>
           )}
