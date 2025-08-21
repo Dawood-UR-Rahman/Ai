@@ -120,9 +120,18 @@ export class MemStorage implements IStorage {
       ...request.invoice,
       id,
       status: request.invoice.status || 'draft',
+      companyPhone: request.invoice.companyPhone || null,
+      companyWebsite: request.invoice.companyWebsite || null,
+      companyAddress: request.invoice.companyAddress || null,
+      clientCompany: request.invoice.clientCompany || null,
+      clientPhone: request.invoice.clientPhone || null,
+      clientAddress: request.invoice.clientAddress || null,
+      dueDate: request.invoice.dueDate || null,
+      notes: request.invoice.notes || null,
+      password: request.invoice.password || null,
       subtotal: subtotal.toFixed(2),
       total: subtotal.toFixed(2), // For now, no tax calculation
-      hostedUrl: request.invoice.isHosted ? `${process.env.REPLIT_DOMAINS?.split(',')[0] || 'localhost:5000'}/invoice/${id}` : null,
+      hostedUrl: request.invoice.isHosted ? `https://workspace-1755760863815.replit.app/invoice/${id}` : null,
       createdAt: now,
       updatedAt: now,
     };
@@ -154,6 +163,15 @@ export class MemStorage implements IStorage {
     const updatedInvoice: Invoice = {
       ...invoice,
       ...updateData,
+      companyPhone: updateData.companyPhone || invoice.companyPhone,
+      companyWebsite: updateData.companyWebsite || invoice.companyWebsite,
+      companyAddress: updateData.companyAddress || invoice.companyAddress,
+      clientCompany: updateData.clientCompany || invoice.clientCompany,
+      clientPhone: updateData.clientPhone || invoice.clientPhone,
+      clientAddress: updateData.clientAddress || invoice.clientAddress,
+      dueDate: updateData.dueDate || invoice.dueDate,
+      notes: updateData.notes || invoice.notes,
+      password: updateData.password || invoice.password,
       updatedAt: new Date(),
     };
     

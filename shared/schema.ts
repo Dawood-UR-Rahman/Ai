@@ -61,6 +61,7 @@ export const insertInvoiceSchema = createInsertSchema(invoices).omit({
 
 export const insertLineItemSchema = createInsertSchema(lineItems).omit({
   id: true,
+  invoiceId: true,
 });
 
 export const updateInvoiceSchema = insertInvoiceSchema.partial();

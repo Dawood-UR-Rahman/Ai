@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertInvoiceSchema, updateInvoiceSchema, sendEmailSchema, type CreateInvoiceRequest } from "@shared/schema";
+import { insertInvoiceSchema, insertLineItemSchema, updateInvoiceSchema, sendEmailSchema, type CreateInvoiceRequest } from "@shared/schema";
 import { z } from "zod";
 import nodemailer from "nodemailer";
 import multer from "multer";
@@ -20,23 +20,18 @@ const upload = multer({
 
 // Configure nodemailer
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT || '587'),
-  secure: parseInt(process.env.SMTP_PORT || '587') === 465,
+  host: 'mail.jetourmultan.com',
+  port: 465,
+  secure: true,
   auth: {
-    user: process.env.SMTP_USER || process.env.EMAIL_USER,
-    pass: process.env.SMTP_PASS || process.env.EMAIL_PASS,
+    user: 'accounts@jetourmultan.com',
+    pass: 'Dawood@1',
   },
 });
 
 const createInvoiceRequestSchema = z.object({
   invoice: insertInvoiceSchema,
-  lineItems: z.array(z.object({
-    description: z.string().min(1),
-    quantity: z.number().int().min(1),
-    rate: z.string().regex(/^\d+(\.\d{1,2})?$/),
-    amount: z.string().regex(/^\d+(\.\d{1,2})?$/),
-  })),
+  lineItems: z.array(insertLineItemSchema),
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -135,7 +130,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const mailOptions = {
-        from: process.env.SMTP_USER || process.env.EMAIL_USER,
+        from: 'accounts@jetourmultan.com',
         to: validatedData.to,
         subject: validatedData.subject || `Invoice ${invoice.invoiceNumber}`,
         text: validatedData.message || `Please find attached invoice ${invoice.invoiceNumber}.`,
