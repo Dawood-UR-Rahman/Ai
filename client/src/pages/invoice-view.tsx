@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getCurrencySymbol, getTemplateById } from "@/lib/invoice-templates";
 
 interface PasswordPromptProps {
   onSubmit: (password: string) => void;
@@ -78,7 +79,7 @@ function InvoiceDisplay({ invoice }: { invoice: InvoiceWithLineItems }) {
             )}
           </div>
           <div className="text-left sm:text-right">
-            <div className="text-2xl sm:text-4xl font-bold text-blue-600 mb-2">INVOICE</div>
+            <div className="text-2xl sm:text-4xl font-bold mb-2" style={{ color: invoice.primaryColor || "#2563eb" }}>INVOICE</div>
             <div className="text-lg sm:text-xl font-semibold">#{invoice.invoiceNumber}</div>
             <div className="mt-4 space-y-1 text-sm">
               <div><strong>Date:</strong> {new Date(invoice.invoiceDate).toLocaleDateString()}</div>
@@ -107,7 +108,7 @@ function InvoiceDisplay({ invoice }: { invoice: InvoiceWithLineItems }) {
           <div className="hidden sm:block">
             <table className="w-full border-collapse">
               <thead>
-                <tr className="bg-blue-600 text-white">
+                <tr className="text-white" style={{ backgroundColor: invoice.primaryColor || "#2563eb" }}>
                   <th className="text-left p-4 font-semibold">Description</th>
                   <th className="text-center p-4 font-semibold">Qty</th>
                   <th className="text-right p-4 font-semibold">Rate</th>
@@ -119,8 +120,8 @@ function InvoiceDisplay({ invoice }: { invoice: InvoiceWithLineItems }) {
                   <tr key={item.id} className="border-b border-gray-200">
                     <td className="p-4">{item.description}</td>
                     <td className="text-center p-4">{item.quantity}</td>
-                    <td className="text-right p-4">${item.rate}</td>
-                    <td className="text-right p-4">${item.amount}</td>
+                    <td className="text-right p-4">{getCurrencySymbol(invoice.currency || "USD")}{item.rate}</td>
+                    <td className="text-right p-4">{getCurrencySymbol(invoice.currency || "USD")}{item.amount}</td>
                   </tr>
                 ))}
               </tbody>
@@ -129,7 +130,7 @@ function InvoiceDisplay({ invoice }: { invoice: InvoiceWithLineItems }) {
 
           {/* Mobile Cards */}
           <div className="sm:hidden space-y-4">
-            <div className="bg-blue-600 text-white p-3 rounded-t-lg font-semibold">
+            <div className="text-white p-3 rounded-t-lg font-semibold" style={{ backgroundColor: invoice.primaryColor || "#2563eb" }}>
               Line Items
             </div>
             {invoice.lineItems.map((item) => (
@@ -142,11 +143,11 @@ function InvoiceDisplay({ invoice }: { invoice: InvoiceWithLineItems }) {
                   </div>
                   <div>
                     <span className="text-gray-600">Rate:</span>
-                    <div className="font-medium">${item.rate}</div>
+                    <div className="font-medium">{getCurrencySymbol(invoice.currency || "USD")}{item.rate}</div>
                   </div>
                   <div>
                     <span className="text-gray-600">Amount:</span>
-                    <div className="font-medium text-blue-600">${item.amount}</div>
+                    <div className="font-medium" style={{ color: invoice.primaryColor || "#2563eb" }}>{getCurrencySymbol(invoice.currency || "USD")}{item.amount}</div>
                   </div>
                 </div>
               </div>
@@ -160,23 +161,26 @@ function InvoiceDisplay({ invoice }: { invoice: InvoiceWithLineItems }) {
             <div className="w-full max-w-sm sm:w-64 space-y-2 bg-gray-50 p-4 rounded-lg">
               <div className="flex justify-between text-sm sm:text-base">
                 <span>Subtotal:</span>
-                <span>${invoice.subtotal}</span>
+                <span>{getCurrencySymbol(invoice.currency || "USD")}{invoice.subtotal}</span>
               </div>
               {parseFloat(invoice.taxPercentage || "0") > 0 && (
                 <div className="flex justify-between text-sm sm:text-base">
                   <span>Tax ({invoice.taxPercentage}%):</span>
-                  <span>${invoice.tax}</span>
+                  <span>{getCurrencySymbol(invoice.currency || "USD")}{invoice.tax}</span>
                 </div>
               )}
               {parseFloat(invoice.shippingCost || "0") > 0 && (
                 <div className="flex justify-between text-sm sm:text-base">
                   <span>Shipping Cost:</span>
-                  <span>${invoice.shippingCost}</span>
+                  <span>{getCurrencySymbol(invoice.currency || "USD")}{invoice.shippingCost}</span>
                 </div>
               )}
-              <div className="flex justify-between text-lg sm:text-2xl font-bold text-blue-600 pt-2 border-t-2 border-gray-300">
+              <div className="flex justify-between text-lg sm:text-2xl font-bold pt-2 border-t-2" style={{ 
+                color: invoice.primaryColor || "#2563eb",
+                borderTopColor: invoice.primaryColor || "#2563eb"
+              }}>
                 <span>Total:</span>
-                <span>${invoice.total}</span>
+                <span>{getCurrencySymbol(invoice.currency || "USD")}{invoice.total}</span>
               </div>
             </div>
           </div>

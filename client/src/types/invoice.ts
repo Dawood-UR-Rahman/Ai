@@ -21,8 +21,13 @@ export interface InvoiceFormData {
   notes: string;
   textInformation: string;
   shippingCode: string;
+  currency: string;
   taxPercentage: string;
   shippingCost: string;
+  template: string;
+  primaryColor: string;
+  secondaryColor: string;
+  fontFamily: string;
   status: string;
   
   // Hosting & security

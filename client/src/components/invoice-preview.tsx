@@ -4,6 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { generateQRCode } from "@/lib/qr-generator";
+import { getCurrencySymbol, getTemplateById } from "@/lib/invoice-templates";
 import type { InvoiceFormData, LineItemFormData } from "@/types/invoice";
 
 interface InvoicePreviewProps {
@@ -47,10 +48,16 @@ export default function InvoicePreview({
   const taxAmount = (subtotal * parseFloat(formData.taxPercentage || "0")) / 100;
   const shippingAmount = parseFloat(formData.shippingCost || "0");
   const total = subtotal + taxAmount + shippingAmount;
+  
+  const template = getTemplateById(formData.template || "classic");
+  const currencySymbol = getCurrencySymbol(formData.currency || "USD");
 
   return (
     <Card>
-      <CardContent className="p-6">
+      <CardContent className="p-6" style={{ 
+        fontFamily: formData.fontFamily || template.fontFamily,
+        backgroundColor: template.backgroundColor 
+      }}>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
           <h3 className="text-lg font-semibold text-gray-900">Invoice Preview</h3>
           {/* QR Code positioned top-right */}
@@ -129,23 +136,23 @@ export default function InvoicePreview({
           <div className="border-t border-gray-300 pt-2 space-y-1">
             <div className="flex justify-between text-xs">
               <span>Subtotal:</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>{currencySymbol}{subtotal.toFixed(2)}</span>
             </div>
             {parseFloat(formData.taxPercentage || "0") > 0 && (
               <div className="flex justify-between text-xs">
                 <span>Tax ({formData.taxPercentage}%):</span>
-                <span>${taxAmount.toFixed(2)}</span>
+                <span>{currencySymbol}{taxAmount.toFixed(2)}</span>
               </div>
             )}
             {shippingAmount > 0 && (
               <div className="flex justify-between text-xs">
                 <span>Shipping:</span>
-                <span>${shippingAmount.toFixed(2)}</span>
+                <span>{currencySymbol}{shippingAmount.toFixed(2)}</span>
               </div>
             )}
-            <div className="flex justify-between font-semibold text-sm border-t border-gray-200 pt-1">
+            <div className="flex justify-between font-semibold text-sm border-t border-gray-200 pt-1" style={{ color: formData.primaryColor || template.primaryColor }}>
               <span>Total:</span>
-              <span>${total.toFixed(2)}</span>
+              <span>{currencySymbol}{total.toFixed(2)}</span>
             </div>
           </div>
         </div>

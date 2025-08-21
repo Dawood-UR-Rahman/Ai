@@ -31,11 +31,18 @@ export const invoices = pgTable("invoices", {
   shippingCode: text("shipping_code"),
   
   // Financial
+  currency: text("currency").notNull().default("USD"),
   subtotal: decimal("subtotal", { precision: 10, scale: 2 }).notNull().default("0"),
   taxPercentage: decimal("tax_percentage", { precision: 5, scale: 2 }).notNull().default("0"),
   tax: decimal("tax", { precision: 10, scale: 2 }).notNull().default("0"),
   shippingCost: decimal("shipping_cost", { precision: 10, scale: 2 }).notNull().default("0"),
   total: decimal("total", { precision: 10, scale: 2 }).notNull().default("0"),
+  
+  // Template & design
+  template: text("template").notNull().default("classic"),
+  primaryColor: text("primary_color").notNull().default("#2563eb"),
+  secondaryColor: text("secondary_color").notNull().default("#64748b"),
+  fontFamily: text("font_family").notNull().default("Inter"),
   
   // Hosting & security
   isHosted: boolean("is_hosted").default(false),
