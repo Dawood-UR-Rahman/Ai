@@ -32,6 +32,8 @@ const defaultFormData: InvoiceFormData = {
   notes: "",
   textInformation: "",
   shippingCode: "",
+  taxPercentage: "0",
+  shippingCost: "0",
   status: "draft",
   isHosted: false,
   isPasswordProtected: false,
@@ -125,6 +127,8 @@ export default function CreateInvoice() {
         notes: existingInvoice.notes || "",
         textInformation: existingInvoice.textInformation || "",
         shippingCode: existingInvoice.shippingCode || "",
+        taxPercentage: existingInvoice.taxPercentage || "0",
+        shippingCost: existingInvoice.shippingCost || "0",
         status: existingInvoice.status,
         isHosted: existingInvoice.isHosted || false,
         isPasswordProtected: existingInvoice.isPasswordProtected || false,
@@ -215,12 +219,16 @@ export default function CreateInvoice() {
       return sum + amount;
     }, 0);
 
+    const taxAmount = (subtotal * parseFloat(formData.taxPercentage || "0")) / 100;
+    const shippingAmount = parseFloat(formData.shippingCost || "0");
+    const finalTotal = subtotal + taxAmount + shippingAmount;
+
     const draftInvoice: InvoiceWithLineItems = {
       id: `draft-${Date.now()}`,
       ...formData,
       subtotal: subtotal.toFixed(2),
-      tax: "0.00",
-      total: subtotal.toFixed(2),
+      tax: taxAmount.toFixed(2),
+      total: finalTotal.toFixed(2),
       hostedUrl: null,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -269,9 +277,11 @@ export default function CreateInvoice() {
       notes: formData.notes || null,
       textInformation: formData.textInformation || null,
       shippingCode: formData.shippingCode || null,
+      taxPercentage: formData.taxPercentage || "0",
+      shippingCost: formData.shippingCost || "0",
       subtotal: subtotal.toFixed(2),
-      tax: "0.00",
-      total: subtotal.toFixed(2),
+      tax: ((subtotal * parseFloat(formData.taxPercentage || "0")) / 100).toFixed(2),
+      total: (subtotal + (subtotal * parseFloat(formData.taxPercentage || "0")) / 100 + parseFloat(formData.shippingCost || "0")).toFixed(2),
       isHosted: formData.isHosted || false,
       isPasswordProtected: formData.isPasswordProtected || false,
       password: formData.password || null,

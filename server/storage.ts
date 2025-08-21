@@ -53,8 +53,10 @@ export class MemStorage implements IStorage {
       textInformation: "Please allow 5-7 business days for processing.\nPayment terms: Net 30 days.",
       shippingCode: "UPS-123456789",
       subtotal: "350.00",
-      tax: "0.00",
-      total: "350.00",
+      taxPercentage: "8.25",
+      tax: "28.88",
+      shippingCost: "15.00",
+      total: "393.88",
       isHosted: false,
       isPasswordProtected: false,
       password: null,
@@ -118,6 +120,11 @@ export class MemStorage implements IStorage {
       return sum + amount;
     }, 0);
     
+    const taxPercentage = parseFloat(request.invoice.taxPercentage || "0");
+    const shippingCost = parseFloat(request.invoice.shippingCost || "0");
+    const taxAmount = (subtotal * taxPercentage) / 100;
+    const total = subtotal + taxAmount + shippingCost;
+    
     const invoice: Invoice = {
       id,
       invoiceNumber: request.invoice.invoiceNumber,
@@ -136,9 +143,13 @@ export class MemStorage implements IStorage {
       invoiceDate: request.invoice.invoiceDate,
       dueDate: request.invoice.dueDate || null,
       notes: request.invoice.notes || null,
+      textInformation: request.invoice.textInformation || null,
+      shippingCode: request.invoice.shippingCode || null,
       subtotal: subtotal.toFixed(2),
-      tax: '0.00',
-      total: subtotal.toFixed(2), // For now, no tax calculation
+      taxPercentage: request.invoice.taxPercentage || "0",
+      tax: taxAmount.toFixed(2),
+      shippingCost: request.invoice.shippingCost || "0",
+      total: total.toFixed(2),
       isHosted: request.invoice.isHosted || false,
       isPasswordProtected: request.invoice.isPasswordProtected || false,
       password: request.invoice.password || null,

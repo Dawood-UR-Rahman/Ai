@@ -32,7 +32,9 @@ export const invoices = pgTable("invoices", {
   
   // Financial
   subtotal: decimal("subtotal", { precision: 10, scale: 2 }).notNull().default("0"),
+  taxPercentage: decimal("tax_percentage", { precision: 5, scale: 2 }).notNull().default("0"),
   tax: decimal("tax", { precision: 10, scale: 2 }).notNull().default("0"),
+  shippingCost: decimal("shipping_cost", { precision: 10, scale: 2 }).notNull().default("0"),
   total: decimal("total", { precision: 10, scale: 2 }).notNull().default("0"),
   
   // Hosting & security

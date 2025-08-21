@@ -44,7 +44,9 @@ export default function InvoicePreview({
     return sum + amount;
   }, 0);
 
-  const total = subtotal; // No tax calculation for now
+  const taxAmount = (subtotal * parseFloat(formData.taxPercentage || "0")) / 100;
+  const shippingAmount = parseFloat(formData.shippingCost || "0");
+  const total = subtotal + taxAmount + shippingAmount;
 
   return (
     <Card>
@@ -124,8 +126,24 @@ export default function InvoicePreview({
             )}
           </div>
           
-          <div className="border-t border-gray-300 pt-2">
-            <div className="flex justify-between font-semibold text-sm">
+          <div className="border-t border-gray-300 pt-2 space-y-1">
+            <div className="flex justify-between text-xs">
+              <span>Subtotal:</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </div>
+            {parseFloat(formData.taxPercentage || "0") > 0 && (
+              <div className="flex justify-between text-xs">
+                <span>Tax ({formData.taxPercentage}%):</span>
+                <span>${taxAmount.toFixed(2)}</span>
+              </div>
+            )}
+            {shippingAmount > 0 && (
+              <div className="flex justify-between text-xs">
+                <span>Shipping:</span>
+                <span>${shippingAmount.toFixed(2)}</span>
+              </div>
+            )}
+            <div className="flex justify-between font-semibold text-sm border-t border-gray-200 pt-1">
               <span>Total:</span>
               <span>${total.toFixed(2)}</span>
             </div>

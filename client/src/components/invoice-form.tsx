@@ -257,6 +257,35 @@ export default function InvoiceForm({
               />
             </div>
           </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div>
+              <Label htmlFor="taxPercentage">Tax Percentage (%)</Label>
+              <Input
+                id="taxPercentage"
+                type="number"
+                min="0"
+                max="100"
+                step="0.01"
+                value={formData.taxPercentage}
+                onChange={(e) => onFormChange("taxPercentage", e.target.value)}
+                placeholder="8.25"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="shippingCost">Shipping Cost ($)</Label>
+              <Input
+                id="shippingCost"
+                type="number"
+                min="0"
+                step="0.01"
+                value={formData.shippingCost}
+                onChange={(e) => onFormChange("shippingCost", e.target.value)}
+                placeholder="15.00"
+                className="mt-1"
+              />
+            </div>
+          </div>
         </CardContent>
       </Card>
 

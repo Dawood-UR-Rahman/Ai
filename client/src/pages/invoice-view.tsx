@@ -162,10 +162,18 @@ function InvoiceDisplay({ invoice }: { invoice: InvoiceWithLineItems }) {
                 <span>Subtotal:</span>
                 <span>${invoice.subtotal}</span>
               </div>
-              <div className="flex justify-between text-sm sm:text-base">
-                <span>Tax:</span>
-                <span>${invoice.tax}</span>
-              </div>
+              {parseFloat(invoice.taxPercentage || "0") > 0 && (
+                <div className="flex justify-between text-sm sm:text-base">
+                  <span>Tax ({invoice.taxPercentage}%):</span>
+                  <span>${invoice.tax}</span>
+                </div>
+              )}
+              {parseFloat(invoice.shippingCost || "0") > 0 && (
+                <div className="flex justify-between text-sm sm:text-base">
+                  <span>Shipping Cost:</span>
+                  <span>${invoice.shippingCost}</span>
+                </div>
+              )}
               <div className="flex justify-between text-lg sm:text-2xl font-bold text-blue-600 pt-2 border-t-2 border-gray-300">
                 <span>Total:</span>
                 <span>${invoice.total}</span>
