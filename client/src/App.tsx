@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Navigation from "@/components/navigation";
 import CreateInvoice from "@/pages/create-invoice";
 import InvoiceHistory from "@/pages/invoice-history";
+import InvoiceView from "@/pages/invoice-view";
 
 function Router() {
   return (
@@ -17,6 +18,7 @@ function Router() {
           <Route path="/create" component={CreateInvoice} />
           <Route path="/history" component={InvoiceHistory} />
           <Route path="/edit/:id" component={CreateInvoice} />
+          <Route path="/view/:id" component={InvoiceView} />
         </Switch>
       </main>
     </div>

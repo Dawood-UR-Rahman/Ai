@@ -21,7 +21,7 @@ export default function InvoicePreview({
     if (formData.isHosted) {
       const baseUrl = 'https://workspace-1755760863815.replit.app';
       // For preview, show a sample URL since we don't have the actual invoice ID yet
-      return `${baseUrl}/invoice/preview`;
+      return `${baseUrl}/view/preview`;
     }
     return null;
   }, [formData.isHosted]);

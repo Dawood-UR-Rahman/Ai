@@ -11,7 +11,7 @@ export interface IStorage {
   
   // Line item operations
   getLineItemsByInvoiceId(invoiceId: string): Promise<LineItem[]>;
-  addLineItem(lineItem: InsertLineItem): Promise<LineItem>;
+  addLineItem(invoiceId: string, lineItem: InsertLineItem): Promise<LineItem>;
   updateLineItem(id: string, lineItem: Partial<LineItem>): Promise<LineItem | undefined>;
   deleteLineItem(id: string): Promise<boolean>;
   
@@ -117,21 +117,30 @@ export class MemStorage implements IStorage {
     }, 0);
     
     const invoice: Invoice = {
-      ...request.invoice,
       id,
+      invoiceNumber: request.invoice.invoiceNumber,
       status: request.invoice.status || 'draft',
+      companyName: request.invoice.companyName,
+      companyEmail: request.invoice.companyEmail,
       companyPhone: request.invoice.companyPhone || null,
       companyWebsite: request.invoice.companyWebsite || null,
       companyAddress: request.invoice.companyAddress || null,
+      companyLogo: request.invoice.companyLogo || null,
+      clientName: request.invoice.clientName,
+      clientEmail: request.invoice.clientEmail,
       clientCompany: request.invoice.clientCompany || null,
       clientPhone: request.invoice.clientPhone || null,
       clientAddress: request.invoice.clientAddress || null,
+      invoiceDate: request.invoice.invoiceDate,
       dueDate: request.invoice.dueDate || null,
       notes: request.invoice.notes || null,
-      password: request.invoice.password || null,
       subtotal: subtotal.toFixed(2),
+      tax: '0.00',
       total: subtotal.toFixed(2), // For now, no tax calculation
-      hostedUrl: request.invoice.isHosted ? `https://workspace-1755760863815.replit.app/invoice/${id}` : null,
+      isHosted: request.invoice.isHosted || false,
+      isPasswordProtected: request.invoice.isPasswordProtected || false,
+      password: request.invoice.password || null,
+      hostedUrl: request.invoice.isHosted ? `https://workspace-1755760863815.replit.app/view/${id}` : null,
       createdAt: now,
       updatedAt: now,
     };
@@ -195,11 +204,11 @@ export class MemStorage implements IStorage {
     );
   }
 
-  async addLineItem(lineItem: InsertLineItem): Promise<LineItem> {
+  async addLineItem(invoiceId: string, lineItem: InsertLineItem): Promise<LineItem> {
     const id = randomUUID();
     const newLineItem: LineItem = {
       id,
-      invoiceId: lineItem.invoiceId,
+      invoiceId: invoiceId,
       description: lineItem.description,
       quantity: lineItem.quantity || 1,
       rate: lineItem.rate,

@@ -141,7 +141,7 @@ export default function CreateInvoice() {
   // Generate QR code when hosting is enabled
   useEffect(() => {
     if (formData.isHosted && existingInvoice) {
-      const invoiceUrl = `https://workspace-1755760863815.replit.app/invoice/${existingInvoice.id}`;
+      const invoiceUrl = `https://workspace-1755760863815.replit.app/view/${existingInvoice.id}`;
       generateQRCode(invoiceUrl)
         .then(setQRCodeDataURL)
         .catch((error) => {
