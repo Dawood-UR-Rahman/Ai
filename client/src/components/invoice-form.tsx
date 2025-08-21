@@ -234,6 +234,29 @@ export default function InvoiceForm({
               className="mt-1"
             />
           </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div>
+              <Label htmlFor="textInformation">Additional Information</Label>
+              <Textarea
+                id="textInformation"
+                value={formData.textInformation}
+                onChange={(e) => onFormChange("textInformation", e.target.value)}
+                rows={2}
+                placeholder="Additional details, terms, or instructions..."
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="shippingCode">Shipping/Tracking Code</Label>
+              <Input
+                id="shippingCode"
+                value={formData.shippingCode}
+                onChange={(e) => onFormChange("shippingCode", e.target.value)}
+                placeholder="Track-123456"
+                className="mt-1"
+              />
+            </div>
+          </div>
         </CardContent>
       </Card>
 

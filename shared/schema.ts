@@ -27,6 +27,8 @@ export const invoices = pgTable("invoices", {
   invoiceDate: text("invoice_date").notNull(),
   dueDate: text("due_date"),
   notes: text("notes"),
+  textInformation: text("text_information"),
+  shippingCode: text("shipping_code"),
   
   // Financial
   subtotal: decimal("subtotal", { precision: 10, scale: 2 }).notNull().default("0"),

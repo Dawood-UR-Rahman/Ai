@@ -19,6 +19,8 @@ export interface InvoiceFormData {
   invoiceDate: string;
   dueDate: string;
   notes: string;
+  textInformation: string;
+  shippingCode: string;
   status: string;
   
   // Hosting & security
