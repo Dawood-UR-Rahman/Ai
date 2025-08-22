@@ -1,5 +1,6 @@
 import { Document, Page, Text, View, StyleSheet, Image, PDFDownloadLink } from '@react-pdf/renderer';
 import { InvoiceWithLineItems } from '@shared/schema';
+import { getCurrencySymbol } from './invoice-templates';
 
 const styles = StyleSheet.create({
   page: {
@@ -117,6 +118,34 @@ export function PDFInvoice({ invoice, qrCodeDataURL }: PDFInvoiceProps) {
   const invoiceQRCode = qrCodeDataURL || (invoice.isHosted && invoice.hostedUrl ? 
     `https://api.qrserver.com/v1/create-qr-code/?size=200x200&format=png&data=${encodeURIComponent(invoice.hostedUrl)}` : null);
   
+  const currencySymbol = getCurrencySymbol(invoice.currency || "USD");
+  const primaryColor = invoice.primaryColor || "#2563eb";
+  
+  // Create dynamic styles based on invoice template
+  const dynamicStyles = StyleSheet.create({
+    titleColored: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 10,
+      color: primaryColor,
+    },
+    tableHeaderColored: {
+      flexDirection: 'row',
+      backgroundColor: primaryColor,
+      padding: 10,
+      fontWeight: 'bold',
+      color: '#ffffff',
+    },
+    grandTotalColored: {
+      fontSize: 14,
+      fontWeight: 'bold',
+      borderTopWidth: 1,
+      borderTopColor: primaryColor,
+      paddingTop: 5,
+      color: primaryColor,
+    },
+  });
+  
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -135,7 +164,12 @@ export function PDFInvoice({ invoice, qrCodeDataURL }: PDFInvoiceProps) {
             )}
           </View>
           <View style={styles.invoiceInfo}>
-            <Text style={styles.title}>INVOICE</Text>
+            <Text style={dynamicStyles.titleColored}>
+              {invoice.documentType === "credit-note" ? "CREDIT NOTE" :
+               invoice.documentType === "quote" ? "QUOTE" :
+               invoice.documentType === "purchase-order" ? "PURCHASE ORDER" :
+               "INVOICE"}
+            </Text>
             <Text style={styles.text}>#{invoice.invoiceNumber}</Text>
             <Text style={styles.text}>Date: {new Date(invoice.invoiceDate).toLocaleDateString()}</Text>
             {invoice.dueDate && (
@@ -160,7 +194,7 @@ export function PDFInvoice({ invoice, qrCodeDataURL }: PDFInvoiceProps) {
 
         {/* Line Items Table */}
         <View style={styles.table}>
-          <View style={styles.tableHeader}>
+          <View style={dynamicStyles.tableHeaderColored}>
             <Text style={styles.tableColDescription}>Description</Text>
             <Text style={styles.tableColQty}>Qty</Text>
             <Text style={styles.tableColRate}>Rate</Text>
@@ -170,8 +204,8 @@ export function PDFInvoice({ invoice, qrCodeDataURL }: PDFInvoiceProps) {
             <View key={index} style={styles.tableRow}>
               <Text style={styles.tableColDescription}>{item.description}</Text>
               <Text style={styles.tableColQty}>{item.quantity}</Text>
-              <Text style={styles.tableColRate}>${item.rate}</Text>
-              <Text style={styles.tableColAmount}>${item.amount}</Text>
+              <Text style={styles.tableColRate}>{currencySymbol}{item.rate}</Text>
+              <Text style={styles.tableColAmount}>{currencySymbol}{item.amount}</Text>
             </View>
           ))}
         </View>
@@ -180,15 +214,23 @@ export function PDFInvoice({ invoice, qrCodeDataURL }: PDFInvoiceProps) {
         <View style={styles.totals}>
           <View style={styles.totalRow}>
             <Text style={styles.totalLabel}>Subtotal:</Text>
-            <Text style={styles.totalValue}>${invoice.subtotal}</Text>
+            <Text style={styles.totalValue}>{currencySymbol}{invoice.subtotal}</Text>
           </View>
-          <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Tax:</Text>
-            <Text style={styles.totalValue}>${invoice.tax}</Text>
-          </View>
-          <View style={[styles.totalRow, styles.grandTotal]}>
+          {parseFloat(invoice.taxPercentage || "0") > 0 && (
+            <View style={styles.totalRow}>
+              <Text style={styles.totalLabel}>Tax ({invoice.taxPercentage}%):</Text>
+              <Text style={styles.totalValue}>{currencySymbol}{invoice.tax}</Text>
+            </View>
+          )}
+          {parseFloat(invoice.shippingCost || "0") > 0 && (
+            <View style={styles.totalRow}>
+              <Text style={styles.totalLabel}>Shipping Cost:</Text>
+              <Text style={styles.totalValue}>{currencySymbol}{invoice.shippingCost}</Text>
+            </View>
+          )}
+          <View style={[styles.totalRow, dynamicStyles.grandTotalColored]}>
             <Text style={styles.totalLabel}>Total:</Text>
-            <Text style={styles.totalValue}>${invoice.total}</Text>
+            <Text style={styles.totalValue}>{currencySymbol}{invoice.total}</Text>
           </View>
         </View>
 

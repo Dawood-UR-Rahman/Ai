@@ -19,12 +19,11 @@ export interface InvoiceFormData {
   invoiceDate: string;
   dueDate: string;
   notes: string;
-  textInformation: string;
-  shippingCode: string;
   currency: string;
   taxPercentage: string;
   shippingCost: string;
   template: string;
+  documentType: string;
   primaryColor: string;
   secondaryColor: string;
   fontFamily: string;

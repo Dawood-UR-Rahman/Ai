@@ -8,7 +8,15 @@ export interface InvoiceTemplate {
   backgroundColor: string;
   fontFamily: string;
   preview: string;
+  documentType?: string;
 }
+
+export const DOCUMENT_TYPES = [
+  { value: "invoice", label: "Invoice", icon: "📄" },
+  { value: "credit-note", label: "Credit Note", icon: "🔴" },
+  { value: "quote", label: "Quote", icon: "🟦" },
+  { value: "purchase-order", label: "Purchase Order", icon: "🟪" }
+];
 
 export const INVOICE_TEMPLATES: InvoiceTemplate[] = [
   {
@@ -65,6 +73,39 @@ export const INVOICE_TEMPLATES: InvoiceTemplate[] = [
     backgroundColor: "#f9fafb",
     fontFamily: "Inter",
     preview: "⚫ Sleek & Tech"
+  },
+  {
+    id: "credit-note",
+    name: "Credit Note Red",
+    description: "Professional red theme for credit notes and refunds",
+    primaryColor: "#dc2626",
+    secondaryColor: "#6b7280",
+    accentColor: "#ef4444",
+    backgroundColor: "#fef2f2",
+    fontFamily: "Inter",
+    preview: "🔴 Credit & Refunds"
+  },
+  {
+    id: "quote",
+    name: "Quote Teal",
+    description: "Fresh teal theme for quotes and estimates",
+    primaryColor: "#0891b2",
+    secondaryColor: "#6b7280",
+    accentColor: "#06b6d4",
+    backgroundColor: "#f0fdfa",
+    fontFamily: "Inter",
+    preview: "🟦 Quotes & Estimates"
+  },
+  {
+    id: "purchase-order",
+    name: "Purchase Order Indigo",
+    description: "Professional indigo theme for purchase orders",
+    primaryColor: "#4f46e5",
+    secondaryColor: "#6b7280",
+    accentColor: "#6366f1",
+    backgroundColor: "#f0f9ff",
+    fontFamily: "Inter",
+    preview: "🟪 Purchase Orders"
   }
 ];
 

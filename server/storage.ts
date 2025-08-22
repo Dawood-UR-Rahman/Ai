@@ -157,6 +157,7 @@ export class MemStorage implements IStorage {
       shippingCost: request.invoice.shippingCost || "0",
       total: total.toFixed(2),
       template: request.invoice.template || "classic",
+      documentType: request.invoice.documentType || "invoice",
       primaryColor: request.invoice.primaryColor || "#2563eb",
       secondaryColor: request.invoice.secondaryColor || "#64748b",
       fontFamily: request.invoice.fontFamily || "Inter",

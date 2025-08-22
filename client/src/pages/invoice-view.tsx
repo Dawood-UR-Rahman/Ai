@@ -79,7 +79,12 @@ function InvoiceDisplay({ invoice }: { invoice: InvoiceWithLineItems }) {
             )}
           </div>
           <div className="text-left sm:text-right">
-            <div className="text-2xl sm:text-4xl font-bold mb-2" style={{ color: invoice.primaryColor || "#2563eb" }}>INVOICE</div>
+            <div className="text-2xl sm:text-4xl font-bold mb-2" style={{ color: invoice.primaryColor || "#2563eb" }}>
+              {invoice.documentType === "credit-note" ? "CREDIT NOTE" :
+               invoice.documentType === "quote" ? "QUOTE" :
+               invoice.documentType === "purchase-order" ? "PURCHASE ORDER" :
+               "INVOICE"}
+            </div>
             <div className="text-lg sm:text-xl font-semibold">#{invoice.invoiceNumber}</div>
             <div className="mt-4 space-y-1 text-sm">
               <div><strong>Date:</strong> {new Date(invoice.invoiceDate).toLocaleDateString()}</div>
@@ -186,38 +191,11 @@ function InvoiceDisplay({ invoice }: { invoice: InvoiceWithLineItems }) {
           </div>
         </div>
 
-        {/* Additional Information */}
-        {(invoice.notes || invoice.textInformation || invoice.shippingCode) && (
+        {/* Notes */}
+        {invoice.notes && (
           <div className="px-4 sm:px-8 pb-4 sm:pb-8 border-t border-gray-200">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Notes */}
-              {invoice.notes && (
-                <div>
-                  <div className="font-semibold mb-2 text-sm sm:text-base">Notes:</div>
-                  <div className="whitespace-pre-line text-gray-700 text-sm sm:text-base">{invoice.notes}</div>
-                </div>
-              )}
-              
-              {/* Text Information */}
-              {invoice.textInformation && (
-                <div>
-                  <div className="font-semibold mb-2 text-sm sm:text-base">Additional Information:</div>
-                  <div className="whitespace-pre-line text-gray-700 text-sm sm:text-base">{invoice.textInformation}</div>
-                </div>
-              )}
-            </div>
-            
-            {/* Shipping Code */}
-            {invoice.shippingCode && (
-              <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                <div className="flex items-center gap-2">
-                  <div className="font-semibold text-blue-800 text-sm sm:text-base">🚚 Shipping/Tracking Code:</div>
-                  <div className="text-blue-900 font-mono text-sm sm:text-base bg-white px-2 py-1 rounded border">
-                    {invoice.shippingCode}
-                  </div>
-                </div>
-              </div>
-            )}
+            <div className="font-semibold mb-2 text-sm sm:text-base">Notes:</div>
+            <div className="whitespace-pre-line text-gray-700 text-sm sm:text-base">{invoice.notes}</div>
           </div>
         )}
 

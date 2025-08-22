@@ -40,6 +40,7 @@ export const invoices = pgTable("invoices", {
   
   // Template & design
   template: text("template").notNull().default("classic"),
+  documentType: text("document_type").notNull().default("invoice"), // invoice, credit-note, quote, purchase-order
   primaryColor: text("primary_color").notNull().default("#2563eb"),
   secondaryColor: text("secondary_color").notNull().default("#64748b"),
   fontFamily: text("font_family").notNull().default("Inter"),

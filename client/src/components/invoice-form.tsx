@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Palette } from "lucide-react";
 import LogoUpload from "./logo-upload";
-import { INVOICE_TEMPLATES, CURRENCIES, FONT_FAMILIES, getTemplateById } from "@/lib/invoice-templates";
+import { INVOICE_TEMPLATES, CURRENCIES, FONT_FAMILIES, DOCUMENT_TYPES, getTemplateById } from "@/lib/invoice-templates";
 import type { InvoiceFormData, LineItemFormData } from "@/types/invoice";
 
 interface InvoiceFormProps {
@@ -237,30 +237,22 @@ export default function InvoiceForm({
               className="mt-1"
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
             <div>
-              <Label htmlFor="textInformation">Additional Information</Label>
-              <Textarea
-                id="textInformation"
-                value={formData.textInformation}
-                onChange={(e) => onFormChange("textInformation", e.target.value)}
-                rows={2}
-                placeholder="Additional details, terms, or instructions..."
-                className="mt-1"
-              />
+              <Label htmlFor="documentType">Document Type</Label>
+              <Select value={formData.documentType} onValueChange={(value) => onFormChange("documentType", value)}>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {DOCUMENT_TYPES.map((type) => (
+                    <SelectItem key={type.value} value={type.value}>
+                      {type.icon} {type.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-            <div>
-              <Label htmlFor="shippingCode">Shipping/Tracking Code</Label>
-              <Input
-                id="shippingCode"
-                value={formData.shippingCode}
-                onChange={(e) => onFormChange("shippingCode", e.target.value)}
-                placeholder="Track-123456"
-                className="mt-1"
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
             <div>
               <Label htmlFor="currency">Currency</Label>
               <Select value={formData.currency} onValueChange={(value) => onFormChange("currency", value)}>
